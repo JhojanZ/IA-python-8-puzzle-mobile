@@ -27,3 +27,18 @@ class Puzzle(Problem):
         tiles = list(s.tiles); tiles[i], tiles[j] = tiles[j], tiles[i]
         return PuzzleState(tiles)
     
+    def is_solvable(self):
+        # Contar las inversiones
+
+        return self.inversion() % 2 == 0
+
+    def inversion(self):
+        inversions = 0
+        flat_tiles = [tile for tile in self.start.tiles if tile != 0]
+        for i in range(len(flat_tiles)):
+            for j in range(i + 1, len(flat_tiles)):
+                if flat_tiles[i] > flat_tiles[j]:
+                    inversions += 1
+        # Un puzzle es solucionable si el número de inversiones es par
+        return inversions
+        
