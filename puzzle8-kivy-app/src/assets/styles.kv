@@ -1,0 +1,63 @@
+<styles>
+<ScreenManager>:
+    MainMenuScreen:
+    AlgorithmSelectionScreen:
+    PuzzleVisualizationScreen:
+
+<MainMenuScreen>:
+    name: 'main_menu'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Welcome to the 8-Puzzle Solver'
+            font_size: 32
+        Button:
+            text: 'Start'
+            on_press: root.manager.current = 'algorithm_selection'
+        Button:
+            text: 'Exit'
+            on_press: app.stop()
+
+<AlgorithmSelectionScreen>:
+    name: 'algorithm_selection'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Select an Algorithm'
+            font_size: 24
+        Button:
+            text: 'Breadth-First Search'
+            on_press: root.manager.current = 'puzzle_visualization'
+        Button:
+            text: 'Depth-First Search'
+            on_press: root.manager.current = 'puzzle_visualization'
+        Button:
+            text: 'Uniform Cost Search'
+            on_press: root.manager.current = 'puzzle_visualization'
+        Button:
+            text: 'Greedy Best-First Search'
+            on_press: root.manager.current = 'puzzle_visualization'
+        Button:
+            text: 'A* Search'
+            on_press: root.manager.current = 'puzzle_visualization'
+        Button:
+            text: 'Back to Main Menu'
+            on_press: root.manager.current = 'main_menu'
+
+<PuzzleVisualizationScreen>:
+    name: 'puzzle_visualization'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Puzzle Visualization'
+            font_size: 24
+        # Placeholder for puzzle display
+        Label:
+            text: 'Puzzle will be displayed here.'
+        Button:
+            text: 'Solve'
+            on_press: app.solve_puzzle()
+        Button:
+            text: 'Back to Algorithm Selection'
+            on_press: root.manager.current = 'algorithm_selection'
+</styles>

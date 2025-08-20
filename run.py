@@ -9,9 +9,8 @@ from IA.No_Informada.Greedy import Greedy
 from IA.No_Informada.A_start import A_star
 from IA.No_Informada.IDA_start import IDA_star
 
-
-
 import time
+from enum import Enum, auto
 
 def run_and_measure(problem, algorithms):
     if not problem.is_solvable():
@@ -24,7 +23,6 @@ def run_and_measure(problem, algorithms):
         result, expanded = fn(problem)
         dt = time.time() - t0
         if result is None:
-            print(f"NOOOOONE ||| {name:18s} | expandidos={expanded:6} | profundidad=None | tiempo={dt:.3f}s")
             depth = None; cost = None; steps = None
         else:
             steps = [a for a,_ in result][1:]  # acciones excluyendo el None inicial
@@ -36,20 +34,11 @@ def run_and_measure(problem, algorithms):
     return rows
 
 # Instancia de prueba
-START = (1,2,3,4,5,0,6,7,8)  # puedes cambiarla por otras
+#START = (1,2,3,4,5,0,6,7,8)  # puedes cambiarla por otras
+START = (1,2,3,4,5,6,7,0,8)  # puedes cambiarla por otras
 p = Puzzle(START)
 
-"""
-algos = [
-    ("BFS", lambda pr: BFS(pr)),
-    ("DFS", lambda pr: DFS(pr)),
-    ("UCS", lambda pr: UCS(pr)),
-    ("Greedy(manhattan)", lambda pr: Greedy(pr, manhattan)),
-    ("A*(manhattan)", lambda pr: A_star(pr, manhattan)),
-    ("A*(misplaced)", lambda pr: A_star(pr, misplaced)),
-    ("IDA*(manhattan)", lambda pr: IDA_star(pr, manhattan)),
-]
-"""
+
 algos = [
     ("BFS", lambda pr: BFS(pr)),
     ("DFS", lambda pr: DFS(pr)),
@@ -58,10 +47,34 @@ algos = [
     ("A*(manhattan)", lambda pr: A_star(pr, manhattan)),
     ("A*(misplaced)", lambda pr: A_star(pr, misplaced))
 ]
-rows = run_and_measure(p, algos)
-for r in rows:
-    print(f"{r[0]:18s} | expandidos={r[1]:6} | profundidad={r[2]} | tiempo={r[3]:.3f}s")
 
+def select_algorithm(algorithm_name):
+    match algorithm_name:
+        case Algorithm.BFS:
+            return run_and_measure(Puzzle(START), [("BFS", lambda pr: BFS(pr))])
+        case Algorithm.DFS:
+            return run_and_measure(Puzzle(START), [("DFS", lambda pr: DFS(pr))])
+        case Algorithm.UCS:
+            return run_and_measure(Puzzle(START), [("UCS", lambda pr: UCS(pr))])
+        case Algorithm.GREEDY_MANHATTAN:
+            return run_and_measure(Puzzle(START), [("Greedy(manhattan)", lambda pr: Greedy(pr, manhattan))])
+        case Algorithm.GREEDY_MISPLACED:
+            return run_and_measure(Puzzle(START), [("Greedy(misplaced)", lambda pr: Greedy(pr, misplaced))])
+        case Algorithm.ASTAR_MANHATTAN:
+            return run_and_measure(Puzzle(START), [("A*(manhattan)", lambda pr: A_star(pr, manhattan))])
+        case Algorithm.ASTAR_MISPLACED:
+            return run_and_measure(Puzzle(START), [("A*(misplaced)", lambda pr: A_star(pr, misplaced))])
+        case _:
+            return None
+
+class Algorithm(Enum):
+    BFS = auto()
+    DFS = auto()
+    UCS = auto()
+    GREEDY_MANHATTAN = auto()
+    GREEDY_MISPLACED = auto()
+    ASTAR_MANHATTAN = auto()
+    ASTAR_MISPLACED = auto()
 
 """
 # Ejecuta este bloque después de correr la celda anterior para ver un gráfico de tiempos.
